@@ -1,0 +1,41 @@
+[workspace]
+authors = ["Henrik Finsberg <henriknf@simula.no>"]
+channels = ["conda-forge"]
+name = "hexahedral-brain-mesh"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "<3.14"
+rust = ">=1.90.0,<1.91"
+scikit-image = ">=0.25.2,<0.26"
+pooch = ">=1.8.2,<2"
+nibabel = ">=5.3.2,<6"
+pandas = ">=2.3.3,<3"
+adios2 = ">=2.10.2,<3"
+mpich = ">=4.3.2,<5"
+mpi4py = ">=4.1.1,<5"
+netcdf4 = ">=1.7.3,<2"
+pip = ">=25.2,<26"
+fenics-dolfinx = ">=0.10.0,<0.11"
+pyvista = ">=0.46.4,<0.47"
+
+[pypi-options]
+no-build-isolation = ["mesh-converter"]
+
+[pypi-dependencies]
+mesh-converter = ">=0.1"
+
+
+[feature.dev.tasks]
+pixiinstall = "pixi install"
+automeshinstall = "pixi run cargo install automesh"
+install = { depends-on = ["pixiinstall", "automesh"] }
+brainmesh = "pixi run python3 create_brain_hexmesh.py && pixi run automesh mesh hex -r 0 -i brain_hexahedral.npy -o brain.exo && mesh-converter -i brain.exo -o brain.xdmf"
+brainmeshsmooth = "pixi run python3 create_brain_hexmesh.py && pixi run automesh mesh hex -r 0 -i brain_hexahedral.npy -o brain.exo && pixi run automesh smooth hex -n 100 -i brain.exo -o brain_smooth.exo && mesh-converter -i brain_smooth.exo -o brain_smooth.xdmf"
+ballmesh = "pixi run python3 create_unit_ball_hex_mesh.py && pixi run automesh mesh hex -r 0 -i unit_ball_hexahedral.npy -o unit_ball.exo && pixi run automesh smooth hex -n 100 -i unit_ball.exo -o unit_ball_smooth.exo && mesh-converter -i unit_ball_smooth.exo -o unit_ball_smooth.xdmf"
+
+[environments]
+dev = ["dev"]
