@@ -34,7 +34,7 @@ pixiinstall = "pixi install"
 automeshinstall = "pixi run cargo install automesh"
 install = { depends-on = ["pixiinstall", "automesh"] }
 brainmesh = "pixi run python3 create_brain_hexmesh.py && pixi run automesh mesh hex -r 0 -i brain_hexahedral.npy -o brain.exo && mesh-converter -i brain.exo -o brain.xdmf"
-brainmeshsmooth = "pixi run python3 create_brain_hexmesh.py && pixi run automesh mesh hex -r 0 -i brain_hexahedral.npy -o brain.exo && pixi run automesh smooth hex -n 100 -i brain.exo -o brain_smooth.exo && mesh-converter -i brain_smooth.exo -o brain_smooth.xdmf"
+brainmeshsmooth = "pixi run python3 create_brain_hexmesh.py && pixi run automesh mesh hex -r 0 -i brain_hexahedral.npy -o brain.exo && pixi run automesh smooth hex -n 200 -c -i brain.exo -o brain_smooth.exo && mesh-converter -i brain_smooth.exo -o brain_smooth.xdmf"
 ballmesh = "pixi run python3 create_unit_ball_hex_mesh.py && pixi run automesh mesh hex -r 0 -i unit_ball_hexahedral.npy -o unit_ball.exo && pixi run automesh smooth hex -n 100 -i unit_ball.exo -o unit_ball_smooth.exo && mesh-converter -i unit_ball_smooth.exo -o unit_ball_smooth.xdmf"
 
 [environments]

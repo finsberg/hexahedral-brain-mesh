@@ -67,20 +67,42 @@ def main():
     #     nib.loadsave.load(seg_folder / "mask_csf.nii").get_fdata().astype(bool)
     # )
 
-    # labels = pd.read_csv("CerebrA_LabelDetails.csv")
-
     brain = np.zeros(data.shape, dtype=np.uint8)
 
     # brain[gm | wm | csf] = 1  # brain mask
     brain[gm | wm] = 1  # brain mask
-    # brain[gm] = 2  # gray matter
-    # brain[wm] = 3  # white matter
+    brain[gm] = 2  # gray matter
+    brain[wm] = 3  # white matter
     # brain[csf] = 4  # csf
 
     # Can read these from the labels as well
-    ventricles = fix_mask(np.isin(data, [29, 80, 37, 88, 41, 92, 5, 56, 11, 62]))
+    # but hardcoding for now to avoid dependency on this csv file.
+    # labels = pd.read_csv("CerebrA_LabelDetails.csv")
+    third_ventricle_rh = 29
+    third_ventricle_lh = 80
+    fourhth_ventricle_rh = 37
+    fourhth_ventricle_lh = 88
+    lateral_ventricle_rh = 41
+    lateral_ventricle_lh = 92
+    inf_lat_vent_rh = 5
+    inf_lat_vent_lh = 56
+    ventricles = fix_mask(
+        np.isin(
+            data,
+            [
+                third_ventricle_rh,
+                third_ventricle_lh,
+                fourhth_ventricle_rh,
+                fourhth_ventricle_lh,
+                lateral_ventricle_rh,
+                lateral_ventricle_lh,
+                inf_lat_vent_rh,
+                inf_lat_vent_lh,
+            ],
+        )
+    )
 
-    brain[ventricles] = 2  # ventricles
+    brain[ventricles] = 4  # ventricles
 
     # breakpoint()
     FILE_NAME = "brain_hexahedral.npy"
